@@ -233,8 +233,8 @@
     @import "layout.css";
     /* Setup */
     .fake-body {
-      width: 920px;
       height: 520px;
+      width: 920px;
     }
     #options-hide-top-bar:checked ~ .fake-body .top-bar {
       display: none;
@@ -324,37 +324,37 @@
 more effort than flexbox.</p>
 
 <pre class="prettyprint lang-css">
-  .grid-1 {
+  .grid-1 { // red
     display: grid;
-    grid-template-columns: fit-content(100px) auto fit-content(300px);
-    grid-template-rows: fit-content(50px) auto;
     grid-template-areas:
             "area-top-bar area-top-bar area-top-bar"
-            "area-left-pane area-main-content area-right-pane";
+            "area-left-pane area-main-content area-right-pane"; // 3 columns x 2 rows
+    grid-template-columns: fit-content(100px) auto fit-content(300px);
+    grid-template-rows: fit-content(50px) auto;
     height: 100%;
   }
-  .top-bar {
-    height: 50px;
+  .top-bar { // blue
     grid-area: area-top-bar;
+    height: 50px;
   }
-  .left-pane {
+  .left-pane { // purple
+    grid-area: area-left-pane;
     overflow: auto;
     resize: horizontal;
     width: 200px;
-    grid-area: area-left-pane;
   }
-  .content-container {
-    overflow: auto;
+  .content-container { // green
     grid-area: area-main-content;
+    overflow: auto;
   }
-  .right-pane {
+  .right-pane { // orange
+    grid-area: area-right-pane;
     overflow: auto;
     resize: horizontal;
     width: 300px;
-    grid-area: area-right-pane;
   }
   .hide-top-bar-condition-true .top-bar {
-    display: none;
+    display: none; // top grid row will automatically collapse to height 0 (but has 2 gaps)
   }
 </pre>
 
@@ -364,8 +364,8 @@ more effort than flexbox.</p>
     @import "layout.css";
     /* Setup */
     .fake-body {
-      width: 920px;
       height: 520px;
+      width: 920px;
     }
     #options-expand-content-to100:checked ~ .fake-body .expandable-content {
       height: calc(100% - 40px);
@@ -377,15 +377,15 @@ more effort than flexbox.</p>
     }
     /* Implementation */
     .grid-1 {
+      background-color: #8f2727;
+      border: #8f2727 10px solid;
       display: grid;
       grid-gap: 10px;
-      grid-template-columns: fit-content(100px) auto fit-content(300px);
-      grid-template-rows: fit-content(50px) auto;
       grid-template-areas:
               "area-top-bar area-top-bar area-top-bar"
               "area-left-pane area-main-content area-right-pane";
-      border: #8f2727 10px solid;
-      background-color: #8f2727;
+      grid-template-columns: fit-content(100px) auto fit-content(300px);
+      grid-template-rows: fit-content(50px) auto;
       height: 100%;
     }
     .top-bar {
@@ -395,22 +395,22 @@ more effort than flexbox.</p>
     .left-pane {
       background-color: #bf8ede;
       border: #6e3b8f 10px solid;
+      grid-area: area-left-pane;
       overflow: auto;
       resize: horizontal;
       width: 200px;
-      grid-area: area-left-pane;
     }
     .content-container {
-      overflow: auto;
       grid-area: area-main-content;
+      overflow: auto;
     }
     .right-pane {
       background-color: #e7b98b;
       border: #ff8000 10px solid;
+      grid-area: area-right-pane;
       overflow: auto;
       resize: horizontal;
       width: 300px;
-      grid-area: area-right-pane;
     }
     #options-hide-top-bar:checked ~ .fake-body .top-bar {
       display: none;
@@ -520,8 +520,8 @@ more effort than flexbox.</p>
     @import "layout.css";
     /* Setup */
     .fake-body {
-      width: 920px;
       height: 520px;
+      width: 920px;
     }
     #options-hide-top-bar:checked ~ .fake-body .top-bar {
       display: none;
@@ -631,46 +631,50 @@ more effort than flexbox.</p>
   more effort than flexbox.</p>
 
 <pre class="prettyprint lang-css">
-  .grid-1 {
+  .grid-1 { // red
     display: grid;
-    grid-template-columns: fit-content(100px) auto fit-content(200px);
-    grid-template-rows: fit-content(50px) auto auto;
     grid-template-areas:
             "area-top-bar area-top-bar area-top-bar"
-            "area-left-pane area-main-content area-right-pane"
-            "area-left-pane area-main-content area-right-pane";
+            "area-left-pane area-main-content area-right-pane"; // 3 columns x 2 rows
+    grid-template-columns: fit-content(100px) auto fit-content(200px);
+    grid-template-rows: fit-content(50px) auto;
     height: 100%;
   }
-  .top-bar {
-    height: 50px;
+  .top-bar { // blue
     grid-area: area-top-bar;
+    height: 50px;
   }
-  .left-pane {
+  .left-pane { // purple
+    grid-area: area-left-pane;
     overflow: auto;
     resize: horizontal;
     width: 200px;
-    grid-area: area-left-pane;
   }
-  .content-container {
-    overflow: auto;
+  .content-container { // green
     grid-area: area-main-content;
+    overflow: auto;
   }
-  .right-pane {
+  .right-pane { // orange
+    grid-area: area-right-pane;
     overflow: auto;
     resize: horizontal;
     width: 300px;
-    grid-area: area-right-pane;
   }
-   .hide-top-bar-condition-true .top-bar {
-    display: none;
+  .hide-top-bar-condition-true .top-bar {
+    display: none; // top grid row will automatically collapse to height 0 (but has 2 gaps)
   }
-   .hide-top-bar-condition-true .grid-1 {
-    grid-template-columns: fit-content(100px) auto auto;
-    grid-template-rows: fit-content(50px) fit-content(200px) fit-content(200px);
+  .move-pane-to-bottom-condition-true .right-pane {
+    height: 200px;
+    resize: vertical;
+    width: 100%;
+  }
+  .move-pane-to-bottom-condition-true .grid-1 {
     grid-template-areas:
-            "area-top-bar area-top-bar area-top-bar"
-            "area-left-pane area-main-content area-main-content"
-            "area-left-pane area-right-pane area-right-pane";
+            "area-top-bar area-top-bar"
+            "area-left-pane area-main-content"
+            "area-left-pane area-right-pane"; // 2 columns x 3 rows
+    grid-template-columns: fit-content(100px) auto;
+    grid-template-rows: fit-content(50px) auto fit-content(200px);
   }
 </pre>
 
@@ -680,8 +684,8 @@ more effort than flexbox.</p>
     @import "layout.css";
     /* Setup */
     .fake-body {
-      width: 920px;
       height: 520px;
+      width: 920px;
     }
     #options-expand-content-to100:checked ~ .fake-body .expandable-content {
       height: calc(100% - 40px);
@@ -693,41 +697,40 @@ more effort than flexbox.</p>
     }
     /* Implementation */
     .grid-1 {
+      background-color: #8f2727;
+      border: #8f2727 10px solid;
       display: grid;
       grid-gap: 10px;
-      grid-template-columns: fit-content(100px) auto fit-content(200px);
-      grid-template-rows: fit-content(50px) auto auto;
       grid-template-areas:
               "area-top-bar area-top-bar area-top-bar"
-              "area-left-pane area-main-content area-right-pane"
               "area-left-pane area-main-content area-right-pane";
-      border: #8f2727 10px solid;
-      background-color: #8f2727;
+      grid-template-columns: fit-content(100px) auto fit-content(200px);
+      grid-template-rows: fit-content(50px) auto;
       height: 100%;
     }
     .top-bar {
-      height: 50px;
       grid-area: area-top-bar;
+      height: 50px;
     }
     .left-pane {
       background-color: #bf8ede;
       border: #6e3b8f 10px solid;
+      grid-area: area-left-pane;
       overflow: auto;
       resize: horizontal;
       width: 200px;
-      grid-area: area-left-pane;
     }
     .content-container {
-      overflow: auto;
       grid-area: area-main-content;
+      overflow: auto;
     }
     .right-pane {
       background-color: #e7b98b;
       border: #ff8000 10px solid;
+      grid-area: area-right-pane;
       overflow: auto;
       resize: horizontal;
       width: 300px;
-      grid-area: area-right-pane;
     }
     #options-hide-top-bar:checked ~ .fake-body .top-bar {
       display: none;
@@ -738,12 +741,12 @@ more effort than flexbox.</p>
       width: 100%;
     }
     #options-move-right-pane-to-bottom:checked ~ .fake-body .grid-1 {
-      grid-template-columns: fit-content(100px) auto auto;
-      grid-template-rows: fit-content(50px) auto fit-content(200px);
       grid-template-areas:
-              "area-top-bar area-top-bar area-top-bar"
-              "area-left-pane area-main-content area-main-content"
-              "area-left-pane area-right-pane area-right-pane";
+              "area-top-bar area-top-bar"
+              "area-left-pane area-main-content"
+              "area-left-pane area-right-pane";
+      grid-template-columns: fit-content(100px) auto;
+      grid-template-rows: fit-content(50px) auto fit-content(200px);
     }
   </style>
   <input type="checkbox" id="options-hide-top-bar">
