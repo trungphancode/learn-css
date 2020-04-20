@@ -1,0 +1,28 @@
+* {
+  box-sizing: border-box;
+}
+:host > input {
+  margin-bottom: 20px;
+}
+.fake-body {
+  background-color: #fdede1;
+  border: #bfab9c 10px solid;
+  display: block;
+  margin: 0;
+  overflow: auto;
+  resize: both;
+}
+.top-bar {
+  background-color: #82b3ff;
+  border: #5d80b7 10px solid;
+}
+.content-container {
+  background-color: #dafac9;
+  border: #aeff82 10px solid;
+}
+.expandable-content {
+  margin: 20px;
+  background-color: #f3bfbf;
+  border: #f56363 10px solid;
+  display: inline-block;
+}
