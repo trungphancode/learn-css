@@ -35,15 +35,15 @@
 <p>Height can be calculated with <code>calc(100% - x)</code> where x is the height of the optional top bar.</p>
 
 <pre class="prettyprint lang-css">
-.top-bar { // blue
-  height: 50px;
-}
-.content-container { // green
-  height: calc(100% - 50px);
-}
-.hide-condition-true .content-container {
-  height: 100%;
-}
+  .top-bar { // blue
+    height: 50px;
+  }
+  .content-container { // green
+    height: calc(100% - 50px);
+  }
+  .hide-condition-true .content-container {
+    height: 100%;
+  }
 </pre>
 
 <template id="p1-calc">
@@ -101,20 +101,20 @@
 <p>The flexbox is more flexible when the top bar is unpredictable in terms of height or visibility.</p>
 
 <pre class="prettyprint lang-css">
-.vertical-flex-1 { // red
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-.top-bar { // blue
-  flex-shrink: 0; // make sure top bar not shrink when the content-container expanding.
-  height: 50px;
-}
-.content-container { // green
-  flex-grow: 1;   // expand the full height. The height value (if exists) will be ignored.
-  height: 0;      // workaround for Safari https://github.com/philipwalton/flexbugs/issues/197. Not needed for Chrome.
-  overflow: auto; // without this, the vertical-flex-1's height can be more than 100%.
-}
+  .vertical-flex-1 { // red
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .top-bar { // blue
+    flex-shrink: 0; // make sure top bar not shrink when the content-container expanding.
+    height: 50px;
+  }
+  .content-container { // green
+    flex-grow: 1;   // expand the full height. The height value (if exists) will be ignored.
+    height: 0;      // workaround for Safari https://github.com/philipwalton/flexbugs/issues/197. Not needed for Chrome.
+    overflow: auto; // without this, the vertical-flex-1's height can be more than 100%.
+  }
 </pre>
 
 <template id="p1-flexbox">
@@ -187,42 +187,44 @@
   <li>Make content occupy the remaining height and width</li>
 </ul>
 
+<h2>Use Flexbox</h2>
+
 <p>Flexbox is used to deal with the unknown widths of the left and right pane.</p>
 
 <pre class="prettyprint lang-css">
-.vertical-flex-1 { // red
-  display: flex;
-  flex-direction: column;
-  height: 100%;   // must exist to limit height to body's height.
-}
-.top-bar { // blue
-  flex-shrink: 0; // not shrink when the horizontal-flex-2 expanding.
-  height: 50px;
-}
-.horizontal-flex-2 { // lighter red
-  display: flex;
-  flex-direction: row;
-  flex-grow: 1;   // expand the full height within vertical-flex-1.
-  overflow: auto; // without this, the vertical-flex-1's height can be more than 100%.
-}
-.left-pane { // purple
-  flex-shrink: 0; // not shrink when content-container expanding.
-  overflow: auto; // without this, the horizontal-flex-2's height can be more than 100%.
-  resize: horizontal;
-  width: 150px;
-}
-.content-container { // green
-  // Don't set height. A height: 100% (or 50%) works properly for Chrome, Firefox, Opera, but causes problem in
-  // Safari. A height value > 100% will impact horizontal-flex-2's height
-  flex-grow: 1;   // expand the full width. The width value (if exists) will be ignored.
-  overflow: auto; // without this, the horizontal-flex-2's height can be more than 100%.
-}
-.right-pane { // orange
-  flex-shrink: 0; // not shrink when content-container expanding.
-  overflow: auto; // without this, the horizontal-flex-2's height can be more than 100%.
-  resize: horizontal;
-  width: 300px;
-}
+  .vertical-flex-1 { // red
+    display: flex;
+    flex-direction: column;
+    height: 100%;   // must exist to limit height to body's height.
+  }
+  .top-bar { // blue
+    flex-shrink: 0; // not shrink when the horizontal-flex-2 expanding.
+    height: 50px;
+  }
+  .horizontal-flex-2 { // lighter red
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;   // expand the full height within vertical-flex-1.
+    overflow: auto; // without this, the vertical-flex-1's height can be more than 100%.
+  }
+  .left-pane { // purple
+    flex-shrink: 0; // not shrink when content-container expanding.
+    overflow: auto; // without this, the horizontal-flex-2's height can be more than 100%.
+    resize: horizontal;
+    width: 150px;
+  }
+  .content-container { // green
+    // Don't set height. A height: 100% (or 50%) works properly for Chrome, Firefox, Opera, but causes problem in
+    // Safari. A height value > 100% will impact horizontal-flex-2's height
+    flex-grow: 1;   // expand the full width. The width value (if exists) will be ignored.
+    overflow: auto; // without this, the horizontal-flex-2's height can be more than 100%.
+  }
+  .right-pane { // orange
+    flex-shrink: 0; // not shrink when content-container expanding.
+    overflow: auto; // without this, the horizontal-flex-2's height can be more than 100%.
+    resize: horizontal;
+    width: 300px;
+  }
 </pre>
 
 <template id="p2-flexbox">
@@ -316,6 +318,134 @@
 </template>
 <script>renderTemplateAsCustomElement('p2-flexbox')</script>
 
+<h2>Use Grid</h2>
+
+<p>Grid can be more simple for layout that that do not change much. But when we need to deal with hiding row, it takes
+more effort than flexbox.</p>
+
+<pre class="prettyprint lang-css">
+  .grid-1 {
+    display: grid;
+    grid-template-columns: fit-content(100px) auto fit-content(300px);
+    grid-template-rows: fit-content(50px) auto;
+    grid-template-areas:
+            "area-top-bar area-top-bar area-top-bar"
+            "area-left-pane area-main-content area-right-pane";
+    height: 100%;
+  }
+  .top-bar {
+    height: 50px;
+    grid-area: area-top-bar;
+  }
+  .left-pane {
+    overflow: auto;
+    resize: horizontal;
+    width: 200px;
+    grid-area: area-left-pane;
+  }
+  .content-container {
+    overflow: auto;
+    grid-area: area-main-content;
+  }
+  .right-pane {
+    overflow: auto;
+    resize: horizontal;
+    width: 300px;
+    grid-area: area-right-pane;
+  }
+  .hide-top-bar-condition-true .top-bar {
+    display: none;
+  }
+</pre>
+
+<template id="p2-grid">
+  <style>
+    @import "shared.css";
+    @import "layout.css";
+    /* Setup */
+    .fake-body {
+      width: 920px;
+      height: 520px;
+    }
+    #options-expand-content-to100:checked ~ .fake-body .expandable-content {
+      height: calc(100% - 40px);
+      width: calc(100% - 40px);
+    }
+    #options-expand-content-to150:checked ~ .fake-body .expandable-content {
+      height: calc(150% - 40px);
+      width: calc(150% - 40px);
+    }
+    /* Implementation */
+    .grid-1 {
+      display: grid;
+      grid-gap: 10px;
+      grid-template-columns: fit-content(100px) auto fit-content(300px);
+      grid-template-rows: fit-content(50px) auto;
+      grid-template-areas:
+              "area-top-bar area-top-bar area-top-bar"
+              "area-left-pane area-main-content area-right-pane";
+      border: #8f2727 10px solid;
+      background-color: #8f2727;
+      height: 100%;
+    }
+    .top-bar {
+      height: 50px;
+      grid-area: area-top-bar;
+    }
+    .left-pane {
+      background-color: #bf8ede;
+      border: #6e3b8f 10px solid;
+      overflow: auto;
+      resize: horizontal;
+      width: 200px;
+      grid-area: area-left-pane;
+    }
+    .content-container {
+      overflow: auto;
+      grid-area: area-main-content;
+    }
+    .right-pane {
+      background-color: #e7b98b;
+      border: #ff8000 10px solid;
+      overflow: auto;
+      resize: horizontal;
+      width: 300px;
+      grid-area: area-right-pane;
+    }
+    #options-hide-top-bar:checked ~ .fake-body .top-bar {
+      display: none;
+    }
+  </style>
+  <input type="checkbox" id="options-hide-top-bar">
+  <label for="options-hide-top-bar">Hide top bar</label>
+  <input type="checkbox" id="options-expand-content-to100">
+  <label for="options-expand-content-to100">Expand content to 100%</label>
+  <input type="checkbox" id="options-expand-content-to150">
+  <label for="options-expand-content-to150">Expand content to 150%</label>
+  <input type="button" value="Reset size" onclick="resetAllSizes(this)">
+  <div class="fake-body">
+    <div class="grid-1">
+      <div class="top-bar">Optional top bar, height 50.</div>
+      <div class="left-pane">
+        <div class="expandable-content">
+          Expandable left content.
+        </div>
+      </div>
+      <div class="content-container">
+        <div class="expandable-content">
+          Expandable main content.
+        </div>
+      </div>
+      <div class="right-pane">
+        <div class="expandable-content">
+          Expandable right content.
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>renderTemplateAsCustomElement('p2-grid')</script>
+
 
 
 <h1>3. Optional Top Bar, full height Content with left Pane and right/bottom pane</h1>
@@ -329,57 +459,59 @@
   <li>Make content occupy the remaining height and width</li>
 </ul>
 
+<h2>Use Flexbox</h2>
+
 <p>Flexbox is used to deal with the unknown widths of the left and right pane.</p>
 
 <pre class="prettyprint lang-css">
-.vertical-flex-1 { // red
-  display: flex;
-  flex-direction: column;
-  height: 100%;   // must exist to limit height to body's height.
-}
-.top-bar { // blue
-  flex-shrink: 0; // not shrink when the horizontal-flex-2 expanding.
-  height: 50px;
-}
-.horizontal-flex-2 { // lighter red
-  display: flex;
-  flex-direction: row;
-  flex-grow: 1;   // expand the full height within vertical-flex-1.
-  overflow: auto; // without this, the vertical-flex-1's height can be more than 100%.
-}
-.left-pane { // purple
-  flex-shrink: 0; // not shrink when content-container expanding.
-  overflow: auto; // without this, the horizontal-flex-2's height can be more than 100%.
-  resize: horizontal;
-  width: 150px;
-}
-.horz-vert-flex-3 { // lighter red
-  display: flex;
-  flex-grow: 1; // expand the full width. The width value (if exists) will be ignored.
-}
-.content-container { // green
-  // Don't set height. A height: 100% (or 50%) works properly for Chrome, Firefox, Opera, but causes problem in
-  // Safari. A height value > 100% will impact horizontal-flex-2's height
-  flex-grow: 1;   // expand the full width or height. The width value (if exists) will be ignored.
-  overflow: auto; // without this, the horizontal-flex-2's height can be more than 100%.
-}
-.right-pane { // orange
-  flex-shrink: 0; // not shrink when content-container expanding.
-  overflow: auto; // without this, the horizontal-flex-2's height can be more than 100%.
-  resize: horizontal;
-  width: 300px;
-}
-.move-pane-to-bottom-condition-true .horz-vert-flex-3 {
-  flex-direction: column;
-}
-.move-pane-to-bottom-condition-true .content-container {
-  height: 0;     // workaround for Safari https://github.com/philipwalton/flexbugs/issues/197. Not needed for Chrome.
-}
-.move-pane-to-bottom-condition-true .right-pane {
-  height: 200px;
-  resize: vertical;
-  width: 100%;
-}
+  .vertical-flex-1 { // red
+    display: flex;
+    flex-direction: column;
+    height: 100%;   // must exist to limit height to body's height.
+  }
+  .top-bar { // blue
+    flex-shrink: 0; // not shrink when the horizontal-flex-2 expanding.
+    height: 50px;
+  }
+  .horizontal-flex-2 { // lighter red
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;   // expand the full height within vertical-flex-1.
+    overflow: auto; // without this, the vertical-flex-1's height can be more than 100%.
+  }
+  .left-pane { // purple
+    flex-shrink: 0; // not shrink when content-container expanding.
+    overflow: auto; // without this, the horizontal-flex-2's height can be more than 100%.
+    resize: horizontal;
+    width: 150px;
+  }
+  .horz-vert-flex-3 { // lighter red
+    display: flex;
+    flex-grow: 1; // expand the full width. The width value (if exists) will be ignored.
+  }
+  .content-container { // green
+    // Don't set height. A height: 100% (or 50%) works properly for Chrome, Firefox, Opera, but causes problem in
+    // Safari. A height value > 100% will impact horizontal-flex-2's height
+    flex-grow: 1;   // expand the full width or height. The width value (if exists) will be ignored.
+    overflow: auto; // without this, the horizontal-flex-2's height can be more than 100%.
+  }
+  .right-pane { // orange
+    flex-shrink: 0; // not shrink when content-container expanding.
+    overflow: auto; // without this, the horizontal-flex-2's height can be more than 100%.
+    resize: horizontal;
+    width: 300px;
+  }
+  .move-pane-to-bottom-condition-true .horz-vert-flex-3 {
+    flex-direction: column;
+  }
+  .move-pane-to-bottom-condition-true .content-container {
+    height: 0;     // workaround for Safari https://github.com/philipwalton/flexbugs/issues/197. Not needed for Chrome.
+  }
+  .move-pane-to-bottom-condition-true .right-pane {
+    height: 200px;
+    resize: vertical;
+    width: 100%;
+  }
 </pre>
 
 <template id="p3-flexbox">
@@ -492,6 +624,161 @@
   </div>
 </template>
 <script>renderTemplateAsCustomElement('p3-flexbox')</script>
+
+<h2>Use Grid</h2>
+
+<p>Grid can be more simple for layout that that do not change much. But when we need to deal with hiding row, it takes
+  more effort than flexbox.</p>
+
+<pre class="prettyprint lang-css">
+  .grid-1 {
+    display: grid;
+    grid-template-columns: fit-content(100px) auto fit-content(200px);
+    grid-template-rows: fit-content(50px) auto auto;
+    grid-template-areas:
+            "area-top-bar area-top-bar area-top-bar"
+            "area-left-pane area-main-content area-right-pane"
+            "area-left-pane area-main-content area-right-pane";
+    height: 100%;
+  }
+  .top-bar {
+    height: 50px;
+    grid-area: area-top-bar;
+  }
+  .left-pane {
+    overflow: auto;
+    resize: horizontal;
+    width: 200px;
+    grid-area: area-left-pane;
+  }
+  .content-container {
+    overflow: auto;
+    grid-area: area-main-content;
+  }
+  .right-pane {
+    overflow: auto;
+    resize: horizontal;
+    width: 300px;
+    grid-area: area-right-pane;
+  }
+   .hide-top-bar-condition-true .top-bar {
+    display: none;
+  }
+   .hide-top-bar-condition-true .grid-1 {
+    grid-template-columns: fit-content(100px) auto auto;
+    grid-template-rows: fit-content(50px) fit-content(200px) fit-content(200px);
+    grid-template-areas:
+            "area-top-bar area-top-bar area-top-bar"
+            "area-left-pane area-main-content area-main-content"
+            "area-left-pane area-right-pane area-right-pane";
+  }
+</pre>
+
+<template id="p3-grid">
+  <style>
+    @import "shared.css";
+    @import "layout.css";
+    /* Setup */
+    .fake-body {
+      width: 920px;
+      height: 520px;
+    }
+    #options-expand-content-to100:checked ~ .fake-body .expandable-content {
+      height: calc(100% - 40px);
+      width: calc(100% - 40px);
+    }
+    #options-expand-content-to150:checked ~ .fake-body .expandable-content {
+      height: calc(150% - 40px);
+      width: calc(150% - 40px);
+    }
+    /* Implementation */
+    .grid-1 {
+      display: grid;
+      grid-gap: 10px;
+      grid-template-columns: fit-content(100px) auto fit-content(200px);
+      grid-template-rows: fit-content(50px) auto auto;
+      grid-template-areas:
+              "area-top-bar area-top-bar area-top-bar"
+              "area-left-pane area-main-content area-right-pane"
+              "area-left-pane area-main-content area-right-pane";
+      border: #8f2727 10px solid;
+      background-color: #8f2727;
+      height: 100%;
+    }
+    .top-bar {
+      height: 50px;
+      grid-area: area-top-bar;
+    }
+    .left-pane {
+      background-color: #bf8ede;
+      border: #6e3b8f 10px solid;
+      overflow: auto;
+      resize: horizontal;
+      width: 200px;
+      grid-area: area-left-pane;
+    }
+    .content-container {
+      overflow: auto;
+      grid-area: area-main-content;
+    }
+    .right-pane {
+      background-color: #e7b98b;
+      border: #ff8000 10px solid;
+      overflow: auto;
+      resize: horizontal;
+      width: 300px;
+      grid-area: area-right-pane;
+    }
+    #options-hide-top-bar:checked ~ .fake-body .top-bar {
+      display: none;
+    }
+    #options-move-right-pane-to-bottom:checked ~ .fake-body .right-pane {
+      height: 200px;
+      resize: vertical;
+      width: 100%;
+    }
+    #options-move-right-pane-to-bottom:checked ~ .fake-body .grid-1 {
+      grid-template-columns: fit-content(100px) auto auto;
+      grid-template-rows: fit-content(50px) auto fit-content(200px);
+      grid-template-areas:
+              "area-top-bar area-top-bar area-top-bar"
+              "area-left-pane area-main-content area-main-content"
+              "area-left-pane area-right-pane area-right-pane";
+    }
+  </style>
+  <input type="checkbox" id="options-hide-top-bar">
+  <label for="options-hide-top-bar">Hide top bar</label>
+  <input type="checkbox" id="options-move-right-pane-to-bottom" onclick="resetSizeFor(this, '.right-pane')">
+  <label for="options-move-right-pane-to-bottom">Move right pane to bottom</label>
+  <input type="checkbox" id="options-expand-content-to100">
+  <label for="options-expand-content-to100">Expand content to 100%</label>
+  <input type="checkbox" id="options-expand-content-to150">
+  <label for="options-expand-content-to150">Expand content to 150%</label>
+  <input type="button" value="Reset size" onclick="resetAllSizes(this)">
+  <div class="fake-body">
+    <div class="grid-1">
+      <div class="top-bar">Optional top bar, height 50.</div>
+      <div class="left-pane">
+        <div class="expandable-content">
+          Expandable left content.
+        </div>
+      </div>
+      <div class="content-container">
+        <div class="expandable-content">
+          Expandable main content.
+        </div>
+      </div>
+      <div class="right-pane">
+        <div class="expandable-content">
+          Expandable right content.
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>renderTemplateAsCustomElement('p3-grid')</script>
+
+
 
 <div id="foot-spacer" style="padding-bottom: 500px;"></div>
 <p>The End.</p>
