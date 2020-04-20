@@ -354,7 +354,10 @@ more effort than flexbox.</p>
     width: 300px;
   }
   .hide-top-bar-condition-true .top-bar {
-    display: none; // top grid row will automatically collapse to height 0 (but has 2 gaps)
+    border: 0;
+    height: 0;
+    visibility: hidden;
+    width: 0;
   }
 </pre>
 
@@ -413,7 +416,10 @@ more effort than flexbox.</p>
       width: 300px;
     }
     #options-hide-top-bar:checked ~ .fake-body .top-bar {
-      display: none;
+      border: 0;
+      height: 0;
+      visibility: hidden;
+      width: 0;
     }
   </style>
   <input type="checkbox" id="options-hide-top-bar">
@@ -523,9 +529,6 @@ more effort than flexbox.</p>
       height: 520px;
       width: 920px;
     }
-    #options-hide-top-bar:checked ~ .fake-body .top-bar {
-      display: none;
-    }
     #options-expand-content-to100:checked ~ .fake-body .expandable-content {
       height: calc(100% - 40px);
       width: calc(100% - 40px);
@@ -569,7 +572,7 @@ more effort than flexbox.</p>
       flex-grow: 1;
       overflow: auto;
     }
-    .right-pane {
+    .right-bottom-pane {
       background-color: #e7b98b;
       border: #ff8000 10px solid;
       flex-shrink: 0;
@@ -577,13 +580,22 @@ more effort than flexbox.</p>
       resize: horizontal;
       width: 300px;
     }
-    #options-move-right-pane-to-bottom:checked ~ .fake-body .horz-vert-flex-3 {
+    #options-hide-top-bar:checked ~ .fake-body .top-bar {
+      display: none;
+    }
+    #options-hide-left-pane:checked ~ .fake-body .left-pane {
+      display: none;
+    }
+    #options-hide-right-bottom-pane:checked ~ .fake-body .right-bottom-pane {
+      display: none;
+    }
+    #options-move-right-bottom-pane-to-bottom:checked ~ .fake-body .horz-vert-flex-3 {
       flex-direction: column;
     }
-    #options-move-right-pane-to-bottom:checked ~ .fake-body .content-container {
+    #options-move-right-bottom-pane-to-bottom:checked ~ .fake-body .content-container {
       height: 0; /* workaround for Safari https://github.com/philipwalton/flexbugs/issues/197. Not needed for Chrome. */
     }
-    #options-move-right-pane-to-bottom:checked ~ .fake-body .right-pane {
+    #options-move-right-bottom-pane-to-bottom:checked ~ .fake-body .right-bottom-pane {
       height: 200px;
       resize: vertical;
       width: 100%;
@@ -591,8 +603,12 @@ more effort than flexbox.</p>
   </style>
   <input type="checkbox" id="options-hide-top-bar">
   <label for="options-hide-top-bar">Hide top bar</label>
-  <input type="checkbox" id="options-move-right-pane-to-bottom" onclick="resetSizeFor(this, '.right-pane')">
-  <label for="options-move-right-pane-to-bottom">Move right pane to bottom</label>
+  <input type="checkbox" id="options-hide-left-pane">
+  <label for="options-hide-left-pane">Hide left pane</label>
+  <input type="checkbox" id="options-hide-right-bottom-pane">
+  <label for="options-hide-right-bottom-pane">Hide right/bottom pane</label>
+  <input type="checkbox" id="options-move-right-bottom-pane-to-bottom" onclick="resetSizeFor(this, '.right-bottom-pane')">
+  <label for="options-move-right-bottom-pane-to-bottom">Move right pane to bottom</label>
   <input type="checkbox" id="options-expand-content-to100">
   <label for="options-expand-content-to100">Expand content to 100%</label>
   <input type="checkbox" id="options-expand-content-to150">
@@ -613,7 +629,7 @@ more effort than flexbox.</p>
               Expandable main content.
             </div>
           </div>
-          <div class="right-pane">
+          <div class="right-bottom-pane">
             <div class="expandable-content">
               Expandable right content.
             </div>
@@ -627,15 +643,17 @@ more effort than flexbox.</p>
 
 <h2>Use Grid</h2>
 
-<p>Grid can be more simple for layout that that do not change much. But when we need to deal with hiding row, it takes
-  more effort than flexbox.</p>
+<p>Grid can be more simple for layout that that do not change much. But when we need to deal with hiding rows & columns,
+  it takes more effort than flexbox. In these cases, it's best to have grid-gap=0 and all involved elements should not
+  have border. Moreover, for items to hide, use visibility:hidden, border:0, padding:0, height:0, width:0 instead of
+  using display:none.</p>
 
 <pre class="prettyprint lang-css">
   .grid-1 { // red
     display: grid;
     grid-template-areas:
             "area-top-bar area-top-bar area-top-bar"
-            "area-left-pane area-main-content area-right-pane"; // 3 columns x 2 rows
+            "area-left-pane area-main-content area-right-bottom-pane"; // 3 columns x 2 rows
     grid-template-columns: fit-content(100px) auto fit-content(200px);
     grid-template-rows: fit-content(50px) auto;
     height: 100%;
@@ -654,16 +672,31 @@ more effort than flexbox.</p>
     grid-area: area-main-content;
     overflow: auto;
   }
-  .right-pane { // orange
-    grid-area: area-right-pane;
+  .right-bottom-pane { // orange
+    grid-area: area-right-bottom-pane;
     overflow: auto;
     resize: horizontal;
     width: 300px;
   }
   .hide-top-bar-condition-true .top-bar {
-    display: none; // top grid row will automatically collapse to height 0 (but has 2 gaps)
+    border: 0;
+    height: 0;
+    visibility: hidden;
+    width: 0;
   }
-  .move-pane-to-bottom-condition-true .right-pane {
+  .hide-left-pane-condition-true .left-pane {
+    border: 0;
+    height: 0;
+    visibility: hidden;
+    width: 0;
+  }
+  .hide-right-bottom-pane-condition-true .grid-1 .right-bottom-pane {
+    border: 0;
+    height: 0;
+    visibility: hidden;
+    width: 0;
+  }
+  .move-pane-to-bottom-condition-true .right-bottom-pane {
     height: 200px;
     resize: vertical;
     width: 100%;
@@ -672,7 +705,7 @@ more effort than flexbox.</p>
     grid-template-areas:
             "area-top-bar area-top-bar"
             "area-left-pane area-main-content"
-            "area-left-pane area-right-pane"; // 2 columns x 3 rows
+            "area-left-pane area-right-bottom-pane"; // 2 columns x 3 rows
     grid-template-columns: fit-content(100px) auto;
     grid-template-rows: fit-content(50px) auto fit-content(200px);
   }
@@ -703,7 +736,7 @@ more effort than flexbox.</p>
       grid-gap: 10px;
       grid-template-areas:
               "area-top-bar area-top-bar area-top-bar"
-              "area-left-pane area-main-content area-right-pane";
+              "area-left-pane area-main-content area-right-bottom-pane";
       grid-template-columns: fit-content(100px) auto fit-content(200px);
       grid-template-rows: fit-content(50px) auto;
       height: 100%;
@@ -724,35 +757,54 @@ more effort than flexbox.</p>
       grid-area: area-main-content;
       overflow: auto;
     }
-    .right-pane {
+    .right-bottom-pane {
       background-color: #e7b98b;
       border: #ff8000 10px solid;
-      grid-area: area-right-pane;
+      grid-area: area-right-bottom-pane;
       overflow: auto;
       resize: horizontal;
       width: 300px;
     }
     #options-hide-top-bar:checked ~ .fake-body .top-bar {
-      display: none;
+      border: 0;
+      height: 0;
+      visibility: hidden;
+      width: 0;
     }
-    #options-move-right-pane-to-bottom:checked ~ .fake-body .right-pane {
+    #options-hide-left-pane:checked ~ .fake-body .left-pane {
+      border: 0;
+      height: 0;
+      visibility: hidden;
+      width: 0;
+    }
+    #options-hide-right-bottom-pane:checked ~ .fake-body .grid-1 .right-bottom-pane {
+      border: 0;
+      height: 0;
+      visibility: hidden;
+      width: 0;
+    }
+    #options-move-right-bottom-pane-to-bottom:checked ~ .fake-body .right-bottom-pane {
       height: 200px;
       resize: vertical;
       width: 100%;
     }
-    #options-move-right-pane-to-bottom:checked ~ .fake-body .grid-1 {
+    #options-move-right-bottom-pane-to-bottom:checked ~ .fake-body .grid-1 {
       grid-template-areas:
               "area-top-bar area-top-bar"
               "area-left-pane area-main-content"
-              "area-left-pane area-right-pane";
+              "area-left-pane area-right-bottom-pane";
       grid-template-columns: fit-content(100px) auto;
       grid-template-rows: fit-content(50px) auto fit-content(200px);
     }
   </style>
   <input type="checkbox" id="options-hide-top-bar">
   <label for="options-hide-top-bar">Hide top bar</label>
-  <input type="checkbox" id="options-move-right-pane-to-bottom" onclick="resetSizeFor(this, '.right-pane')">
-  <label for="options-move-right-pane-to-bottom">Move right pane to bottom</label>
+  <input type="checkbox" id="options-hide-left-pane">
+  <label for="options-hide-left-pane">Hide left pane</label>
+  <input type="checkbox" id="options-hide-right-bottom-pane">
+  <label for="options-hide-right-bottom-pane">Hide right/bottom pane</label>
+  <input type="checkbox" id="options-move-right-bottom-pane-to-bottom" onclick="resetSizeFor(this, '.right-bottom-pane')">
+  <label for="options-move-right-bottom-pane-to-bottom">Move right pane to bottom</label>
   <input type="checkbox" id="options-expand-content-to100">
   <label for="options-expand-content-to100">Expand content to 100%</label>
   <input type="checkbox" id="options-expand-content-to150">
@@ -771,7 +823,7 @@ more effort than flexbox.</p>
           Expandable main content.
         </div>
       </div>
-      <div class="right-pane">
+      <div class="right-bottom-pane">
         <div class="expandable-content">
           Expandable right content.
         </div>
